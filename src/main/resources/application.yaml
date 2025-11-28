@@ -1,3 +1,14 @@
 spring:
-  application:
-    name: demo
+  graphql:
+    path: /receive
+
+aws:
+  region: eu-central-1
+  sqs:
+    max-msg-size: 256000   # 256 KB
+    queue-url: https://sqs.eu-central-1.amazonaws.com/123456789012/my-queue
+  s3:
+    bucket: my-messages-bucket
+
+
+# GraphQL endpoint będzie dostępny pod /graphql domyślnie

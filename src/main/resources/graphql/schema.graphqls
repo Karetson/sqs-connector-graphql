@@ -1,0 +1,18 @@
+type Query {
+    _dummy: String
+}
+
+type Mutation {
+  receiveMessage(input: MessageInput!): MessageResult!
+}
+
+input MessageInput {
+  id: String
+  payloadJson: String!   # surowy JSON jako string
+}
+
+type MessageResult {
+  ok: Boolean!
+  destination: String!    # "SQS" or "S3"
+  info: String
+}
