@@ -49,13 +49,13 @@ public class MessageService {
             // 2. Wysyłamy do SQS TYLKO REFERENCJĘ
             // -------------------------------
             String referenceJson = """
-                {
-                  "type": "S3_REFERENCE",
-                  "bucket": "%s",
-                  "key": "%s",
-                  "originalId": "%s"
-                }
-                """.formatted(bucket, key, input.getId());
+                    {
+                      "type": "S3_REFERENCE",
+                      "bucket": "%s",
+                      "key": "%s",
+                      "originalId": "%s"
+                    }
+                    """.formatted(bucket, key, input.getId());
 
             sqs.sendMessage(SendMessageRequest.builder()
                     .queueUrl(queueUrl)

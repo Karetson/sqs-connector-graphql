@@ -1,14 +1,9 @@
-spring:
-  graphql:
-    path: /receive
-
 aws:
   region: eu-central-1
+  key: test
+  secret: test
   sqs:
-    max-msg-size: 256000   # 256 KB
-    queue-url: https://sqs.eu-central-1.amazonaws.com/123456789012/my-queue
+    max-msg-size: 1   # 256 KB
+    queue-url: http://sqs.eu-central-1.localhost.localstack.cloud:4566/000000000000/my-queue
   s3:
     bucket: my-messages-bucket
-
-
-# GraphQL endpoint będzie dostępny pod /graphql domyślnie

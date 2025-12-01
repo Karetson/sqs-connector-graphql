@@ -12,7 +12,7 @@ input MessageInput {
 }
 
 type MessageResult {
-  ok: Boolean!
+  isOk: Boolean!
   destination: String!    # "SQS" or "S3"
   info: String
 }
