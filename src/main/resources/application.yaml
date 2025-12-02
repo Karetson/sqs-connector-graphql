@@ -2,6 +2,7 @@ aws:
   region: eu-central-1
   key: test
   secret: test
+  endpoint: http://localhost:4566
   sqs:
     max-msg-size: 1   # 256 KB
     queue-url: http://sqs.eu-central-1.localhost.localstack.cloud:4566/000000000000/my-queue

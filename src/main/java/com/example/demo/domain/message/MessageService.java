@@ -35,9 +35,6 @@ public class MessageService {
         int payloadSize = payload.getBytes(StandardCharsets.UTF_8).length;
 
         if (payloadSize > maxSize) {
-            // -------------------------------
-            // 1. Upload do S3
-            // -------------------------------
             String key = "messages/" + input.getId() + "-" + UUID.randomUUID() + ".json";
 
             s3.putObject(PutObjectRequest.builder()
@@ -47,9 +44,6 @@ public class MessageService {
                             .build(),
                     RequestBody.fromString(payload));
 
-            // -------------------------------
-            // 2. Wysyłamy do SQS TYLKO REFERENCJĘ
-            // -------------------------------
             String referenceJson = """
                     {
                       "type": "S3_REFERENCE",
@@ -65,20 +59,16 @@ public class MessageService {
                     .build());
 
             return new MessageResultDto(
-                    true,
                     "S3:" + key,
                     "Payload too large → stored in S3, reference sent to SQS"
             );
         }
 
-        // -------------------------------
-        // Payload mieści się → wysyłamy bezpośrednio do SQS
-        // -------------------------------
         sqs.sendMessage(SendMessageRequest.builder()
                 .queueUrl(queueUrl)
                 .messageBody(payload)
                 .build());
 
-        return new MessageResultDto(true, "SQS", "Payload delivered directly to SQS");
+        return new MessageResultDto("SQS", "Payload delivered directly to SQS");
     }
 }

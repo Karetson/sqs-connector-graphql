@@ -8,11 +8,10 @@ type Mutation {
 
 input MessageInput {
   id: String
-  payloadJson: String!   # surowy JSON jako string
+  payloadJson: String!
 }
 
 type MessageResult {
-  isOk: Boolean!
-  destination: String!    # "SQS" or "S3"
+  destination: String!
   info: String
 }

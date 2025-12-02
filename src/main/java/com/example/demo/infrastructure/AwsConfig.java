@@ -20,11 +20,13 @@ public class AwsConfig {
     private String key;
     @Value("${aws.secret}")
     private String secret;
+    @Value("${aws.endpoint}")
+    private String endpoint;
 
     @Bean
     public SqsClient sqsClient() {
         return SqsClient.builder()
-                .endpointOverride(URI.create("http://localhost:4566"))
+                .endpointOverride(URI.create(endpoint))
                 .region(Region.of(region))
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(key, secret)
@@ -35,7 +37,7 @@ public class AwsConfig {
     @Bean
     public S3Client s3Client() {
         return S3Client.builder()
-                .endpointOverride(URI.create("http://localhost:4566"))
+                .endpointOverride(URI.create(endpoint))
                 .region(Region.of(region))
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(key, secret)

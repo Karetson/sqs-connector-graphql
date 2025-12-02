@@ -14,7 +14,7 @@ public class MessageController {
 
     private final MessageService service;
 
-    @MutationMapping()
+    @MutationMapping
     public MessageResultDto receiveMessage(@Argument("input") MessageInputDto input) {
         return service.process(input);
     }
