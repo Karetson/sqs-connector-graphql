@@ -1,5 +1,7 @@
-package com.example.demo;
+package com.example.demo.domain.message;
 
+import com.example.demo.api.dto.MessageInputDto;
+import com.example.demo.api.dto.MessageResultDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
