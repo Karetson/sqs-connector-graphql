@@ -1,0 +1,16 @@
+name: aws
+services:
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=sqs,s3
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_DEFAULT_REGION=eu-central-1
+    volumes:
+      - "./localstack-data:/var/lib/localstack"
+      - "./localstack/init/ready.d:/etc/localstack/init/ready.d"
+      - "/var/run/docker.sock:/var/run/docker.sock"
