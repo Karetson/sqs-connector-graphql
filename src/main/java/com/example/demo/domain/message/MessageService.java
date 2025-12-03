@@ -2,14 +2,11 @@ package com.example.demo.domain.message;
 
 import com.example.demo.api.dto.MessageInputDto;
 import com.example.demo.api.dto.MessageResultDto;
+import com.example.demo.ports.out.S3Port;
+import com.example.demo.ports.out.SqsPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.services.sqs.SqsClient;
-import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -18,17 +15,11 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MessageService {
 
-    @Value("${aws.sqs.queue-url}")
-    private String queueUrl;
-
-    @Value("${aws.s3.bucket}")
-    private String bucket;
-
     @Value("${aws.sqs.max-msg-size}")
     private int maxSize;
 
-    private final SqsClient sqs;
-    private final S3Client s3;
+    private final SqsPort sqs;
+    private final S3Port s3;
 
     public MessageResultDto process(MessageInputDto input) {
         String payload = input.getPayloadJson();
@@ -37,12 +28,7 @@ public class MessageService {
         if (payloadSize > maxSize) {
             String key = "messages/" + input.getId() + "-" + UUID.randomUUID() + ".json";
 
-            s3.putObject(PutObjectRequest.builder()
-                            .bucket(bucket)
-                            .key(key)
-                            .contentType("application/json")
-                            .build(),
-                    RequestBody.fromString(payload));
+            s3.putJson(key, payload);
 
             String referenceJson = """
                     {
@@ -51,12 +37,9 @@ public class MessageService {
                       "key": "%s",
                       "originalId": "%s"
                     }
-                    """.formatted(bucket, key, input.getId());
+                    """.formatted(s3.bucketName(), key, input.getId());
 
-            sqs.sendMessage(SendMessageRequest.builder()
-                    .queueUrl(queueUrl)
-                    .messageBody(referenceJson)
-                    .build());
+            sqs.sendMessage(referenceJson);
 
             return new MessageResultDto(
                     "S3:" + key,
@@ -64,10 +47,7 @@ public class MessageService {
             );
         }
 
-        sqs.sendMessage(SendMessageRequest.builder()
-                .queueUrl(queueUrl)
-                .messageBody(payload)
-                .build());
+        sqs.sendMessage(payload);
 
         return new MessageResultDto("SQS", "Payload delivered directly to SQS");
     }

@@ -1,4 +1,4 @@
-package com.example.demo.infrastructure;
+package com.example.demo.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -16,10 +16,13 @@ public class AwsConfig {
 
     @Value("${aws.region}")
     private String region;
+
     @Value("${aws.key}")
     private String key;
+
     @Value("${aws.secret}")
     private String secret;
+
     @Value("${aws.endpoint}")
     private String endpoint;
 
