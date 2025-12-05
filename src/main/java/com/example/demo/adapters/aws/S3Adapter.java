@@ -18,13 +18,13 @@ public class S3Adapter implements S3Port {
     private final S3Client s3Client;
 
     @Override
-    public void putJson(String key, String json) {
+    public void putJson(String key, String body) {
         s3Client.putObject(PutObjectRequest.builder()
                         .bucket(bucket)
                         .key(key)
                         .contentType("application/json")
                         .build(),
-                RequestBody.fromString(json));
+                RequestBody.fromString(body));
     }
 
     @Override

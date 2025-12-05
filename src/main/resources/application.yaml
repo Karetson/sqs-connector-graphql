@@ -4,7 +4,7 @@ aws:
   secret: test
   endpoint: http://localhost:4566
   sqs:
-    max-msg-size: 1   # 256 KB
+    max-msg-size: 1   # 1 MB
     queue-url: http://localhost:4566/000000000000/my-queue
   s3:
     bucket: my-messages-bucket
